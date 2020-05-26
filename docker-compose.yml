@@ -1,0 +1,44 @@
+version: '3'
+
+networks:
+  dockerapi-dev:
+    driver: bridge
+
+services:
+  fooddev:
+    image: fooddev
+    depends_on:
+      - "postgres_image"
+    ports:
+      - "8000:80"
+    environment:
+      DB_CONNECTION_STRING: "host=postgres_image;port=5432;database=dockerfooddb;username=----;password=----"
+    networks:
+      - dockerapi-dev
+
+  postgres_image:
+    image: postgres:latest
+    ports:
+      - "5432"
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/database
+      - ./dbscripts/fooddbexport.sql:/docker-entrypoint-initdb.d/fooddbexport.sql
+    environment:
+      POSTGRES_USER: "----"
+      POSTGRES_PASSWORD: "----"
+      POSTGRES_DB: "dockerfooddb"
+    networks:
+      - dockerapi-dev
+  
+  #foodgui:
+  #  image: pisano11235/foodtracker:dev
+  #  depends_on:
+  #    - "fooddev"
+  #  ports:
+  #    - "8080:80"
+  #  networks:
+  #    - dockerapi-dev
+volumes:
+  db_volume:
+

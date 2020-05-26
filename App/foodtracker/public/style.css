@@ -1,0 +1,160 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html{
+    box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+a{
+    text-decoration: none;
+}
+
+#root{
+   width: 100%;
+   height: 100vh;
+   display: grid;
+   grid-template-columns: 100%;
+   grid-template-rows: auto 90%;
+   grid-template-areas: 
+   "header"
+   "content"
+}
+
+@media only screen and (min-width: 1025px) {
+    #root {
+      grid-template-columns: 30% 40% 30%;
+      grid-template-areas:
+        "header header header"
+        ". content .";
+    }
+}
+
+.header{
+    grid-area: header;
+    background-color: #fff;
+    display: flex;
+}
+
+.brand{
+    padding: 1rem 0;
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.brand > .brand-link{
+    font-size: 3rem;
+    color: #000;
+}
+
+.content{
+    grid-area: content;
+    margin: 0px;
+}
+
+.wrapper-1{
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-wrapper{
+    width: 80%;
+    text-align: center;
+    border-radius: 40px;
+    background: #fff;
+
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    border:1px solid grey;
+    padding:2px;
+}
+
+.fa-search{
+    color: #000;
+}
+
+.search-btn{
+    color: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    cursor:pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: 3%;
+    top: 0px;
+}
+
+.search-wrapper:hover{
+    background-color: #DDDDDD;
+}
+
+.search-wrapper:hover > .search-btn{
+    background-color: #DDDDDD;
+}
+
+.search-wrapper:hover > .search-text{
+    background-color: #DDDDDD;
+}
+
+/*.fa-search{
+    color: black;
+}*/
+
+.search-text{
+    width: 85%;
+    text-align: center;
+    border: none;
+    padding: 10px;
+    font-size: 14;
+}
+
+.main-cards {
+    margin: 20px;
+    column-gap: 10px;
+  }
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #82bef6;
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 24px;
+    -webkit-column-break-inside: avoid;
+    box-sizing: border-box;
+    border-radius: 25px;
+}
+
+.card-text-paragraf{
+    margin-top: 10px;
+}
+
+.card-text{
+    margin: 20px;
+    text-align: center;
+}
+
+.food-img{
+    filter: invert(1);
+}
+
+.card:first-child {
+height: 250px;
+}
