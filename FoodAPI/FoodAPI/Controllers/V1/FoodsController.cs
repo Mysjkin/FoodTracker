@@ -21,21 +21,23 @@ namespace FoodAPI.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Foods.GetFoodById)]
-        public IActionResult getFood(int id)
+        public async Task<IActionResult> getFood(int id)
         {
-            return Ok(foods_.GetFoodById(id));
+            var food = await foods_.GetFoodById(id);
+            return Ok(food);
         }
 
         [HttpGet(ApiRoutes.Foods.SearchByName)]
-        public IActionResult getFoodsByName([FromQuery] FoodsParameters foodsParameters)
+        public async Task<IActionResult> getFoodsByName([FromQuery] FoodsParameters foodsParameters)
         {
-            return Ok(foods_.GetFoodsByName(foodsParameters));
+            var food = await foods_.GetFoodsByName(foodsParameters);
+            return Ok(food);
         }
 
         [HttpGet(ApiRoutes.Foods.GetFoods)]
-        public IActionResult getFoods([FromQuery] FoodsParameters foodsParameters)
+        public async Task<IActionResult> getFoods([FromQuery] FoodsParameters foodsParameters)
         {
-            var foods = foods_.GetPagedFoods(foodsParameters);
+            var foods = await foods_.GetPagedFoods(foodsParameters);
             return Ok(foods);
         }
     }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodAPI.Controllers.V1
 {
@@ -16,15 +17,15 @@ namespace FoodAPI.Controllers.V1
             context_ = context;
         }
 
-        public List<Foods> GetPagedFoods(FoodsParameters foodsParameters)
+        public async Task<List<Foods>> GetPagedFoods(FoodsParameters foodsParameters)
         {
-            var foods = context_.Foods
+            var foodsTask = context_.Foods
                 .OrderBy(f => f.NameDk)
                 .Skip((foodsParameters.PageNumber - 1) * foodsParameters.PageSize)
                 .Take(foodsParameters.PageSize)
-                .ToList();
+                .ToListAsync();
 
-            return foods;
+            return await foodsTask;
         }
 
         /* A get on food name returns a list of SearchFood types since this
@@ -33,30 +34,31 @@ namespace FoodAPI.Controllers.V1
            Input: A food name.
            Output: A list of SearchFood instances.
         */
-        public List<SearchFood> GetFoodsByName(FoodsParameters foodsParameters)
+        public async Task<List<SearchFood>> GetFoodsByName(FoodsParameters foodsParameters)
         {
             string name = foodsParameters.Name;
             if (string.IsNullOrWhiteSpace(name))
             {
                 return new List<SearchFood>();
             }
-            var foods = context_.Foods
+            var foodsTask = context_.Foods
                         .Where(o => o.NameDk
                             .ToLower()
                             .Contains(name.Trim().ToLower()))
                         .OrderBy(f => f.NameDk)
                         .Skip((foodsParameters.PageNumber - 1) * foodsParameters.PageSize)
                         .Take(foodsParameters.PageSize)
-                        .ToList();
+                        .ToListAsync();
 
             List<SearchFood> sfs = new List<SearchFood>();
+            var foods = await foodsTask;
             foreach (var f in foods)
             {
                 SearchFood sf = new SearchFood();
                 sf.Id = f.Id;
                 sf.NameDk = f.NameDk;
 
-                List<Macronutrients> macros = context_.Macronutrients.Where(o => o.FoodId == f.NameHash).ToList();
+                List<Macronutrients> macros = await context_.Macronutrients.Where(o => o.FoodId == f.NameHash).ToListAsync();
 
                 sf.Kcal = macros.Where(o => o.Name.ToLower().Contains("kcal")).Select(o => o.Value).FirstOrDefault();
                 sf.Protein = macros.Where(o => o.Name.ToLower().Contains("protein, deklaration")).Select(o => o.Value).FirstOrDefault();
@@ -74,36 +76,38 @@ namespace FoodAPI.Controllers.V1
            Input: A food id.
            Output: An instance of the CompleteFood viewmodel.
         */
-        public CompleteFood GetFoodById(int id)
+        public async Task<CompleteFood> GetFoodById(int id)
         {
-            Foods food = context_.Foods.Where(o => o.Id == id).ToList().First();
+            Task<Foods> foodTask = context_.Foods.Where(o => o.Id == id).Select(o => o).FirstOrDefaultAsync();
+            var food = await foodTask;
             int foodHash = food.NameHash;
 
-            List<AminoAcids> aminoAcids = context_.AminoAcids.Where(o => o.FoodId == foodHash).ToList();
+            Task<List<AminoAcids>> aminoAcidsTask = context_.AminoAcids.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<Carbohydrates> carbohydrates = context_.Carbohydrates.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <Carbohydrates>> carbohydratesTask = context_.Carbohydrates.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<FattyAcidsSums> fattyAcidsSums = context_.FattyAcidsSums.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <FattyAcidsSums>> fattyAcidsSumsTask = context_.FattyAcidsSums.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<Macronutrients> macronutrients = context_.Macronutrients.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <Macronutrients>> macronutrientsTask = context_.Macronutrients.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<MineralsAndInorganic> mineralsAndInorganic = context_.MineralsAndInorganic.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <MineralsAndInorganic>> mineralsAndInorganicTask = context_.MineralsAndInorganic.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<OrganicAcids> organicAcids = context_.OrganicAcids.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <OrganicAcids>> organicAcidsTask = context_.OrganicAcids.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<Sterols> sterols = context_.Sterols.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <Sterols>> sterolsTask = context_.Sterols.Where(o => o.FoodId == foodHash).ToListAsync();
 
-            List<Vitamins> vitamins = context_.Vitamins.Where(o => o.FoodId == foodHash).ToList();
+            Task<List <Vitamins>> vitaminsTask = context_.Vitamins.Where(o => o.FoodId == foodHash).ToListAsync();
 
             CompleteFood cf = new CompleteFood();
             cf.Food = food;
-            cf.AminoAcids = aminoAcids;
-            cf.Carbohydrates = carbohydrates;
-            cf.FattyAcids = fattyAcidsSums;
-            cf.Macros = macronutrients;
-            cf.Minerals = mineralsAndInorganic;
-            cf.Sterols = sterols;
-            cf.Vitamins = vitamins;
+            cf.AminoAcids = await aminoAcidsTask;
+            cf.Carbohydrates = await carbohydratesTask;
+            cf.FattyAcids = await fattyAcidsSumsTask;
+            cf.Macros = await macronutrientsTask;
+            cf.Minerals = await mineralsAndInorganicTask;
+            cf.Sterols = await sterolsTask;
+            cf.Vitamins = await vitaminsTask;
+
             return cf;
         }
 
