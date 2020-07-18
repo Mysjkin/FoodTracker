@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using FoodAPI.Models.FoodModels;
 using Microsoft.AspNetCore.Mvc;
 using FoodAPI.Contracts.V1;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace FoodAPI.Controllers.V1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FoodsController : Controller
     {
         readonly fooddbContext context_;

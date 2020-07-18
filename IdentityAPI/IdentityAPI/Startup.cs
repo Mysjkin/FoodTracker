@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FoodAPI.Installers;
-using FoodAPI.Models.FoodModels;
-using FoodAPI.Options;
+using IdentityAPI.Installers;
+using IdentityAPI.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
-namespace FoodAPI
+namespace IdentityAPI
 {
     public class Startup
     {
