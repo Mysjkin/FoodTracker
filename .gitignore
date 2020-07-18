@@ -1,6 +1,7 @@
 /dbscripts
 /.vs
 /FoodAPI/FoodAPI/appsettings.json
+/IdentityAPI/IdentityAPI/appsettings.json
 *.swp
 *.*~
 project.lock.json
