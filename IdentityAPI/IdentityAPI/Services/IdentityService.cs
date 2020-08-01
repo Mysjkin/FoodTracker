@@ -19,10 +19,37 @@ namespace IdentityAPI.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtSettings _jwtSettings;
 
-        public IdentityService(UserManager<ApplicationUser> userManager)
+        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtsettings)
         {
             _userManager = userManager;
+            _jwtSettings = jwtsettings;
         }
+
+        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new AuthenticationResult
+                {
+                    ErrorMessages = new[] { "Failed to login user with this email or password." }
+                };
+            }
+
+            var validPassword = await _userManager.CheckPasswordAsync(user, password);
+
+            if (!validPassword)
+            {
+                return new AuthenticationResult
+                {
+                    ErrorMessages = new[] { "Failed to login user with this email or password." }
+                };
+            }
+
+            return GenerateAuthenticationResult(user);
+        }
+
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
@@ -51,18 +78,23 @@ namespace IdentityAPI.Services
                 };
             }
 
+            return GenerateAuthenticationResult(newUser);
+        }
+
+        private AuthenticationResult GenerateAuthenticationResult(ApplicationUser user)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new []
+                Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
-                    new Claim("id", newUser.Id)
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("id", user.Id)
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

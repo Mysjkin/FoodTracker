@@ -1,20 +1,20 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import './selectionTable.css';
 import {thresholds} from './thresholdValues.js';
 
 const TableContainer = styled.div`
-text-align: center;
+    text-align: center;
 `;
 
 const RowBox = styled.div`
-width: 100%;
-padding-top: 16px;
-padding-bottom: 8px;
-font-size: 12px;
-border-bottom: 1px solid #eeeeee;
-overflow: auto;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #eeeeee;
+    overflow: auto;
 `;
 
 const linkStyle = {
@@ -23,15 +23,20 @@ const linkStyle = {
     "margin":"0.5em 0.3em 0.3em 0.2em",
     "border-radius":"2em",
     "box-sizing": "border-box",
-    "text-decoration":"none",
     "font-size": "12px",
     "font-family":"'Roboto',sans-serif",
     "font-weight":"300",
-    "color":"#FFFFFF",
-    "background-color":"#82bef6",
     "text-align":"center",
     "transition": "all 0.2s",
     "float": "center",
+    "color": "#FFFFFF",
+    "background-color": "#82bef6"
+}
+
+const addBntDisabled = {
+    "pointer-events": "none",
+    "color": "white",
+    "background-color": "grey"
 }
 
 const selectedFoodStyle = {
@@ -56,23 +61,35 @@ class SelectionTable extends Component {
         super(props);
         this.state = {
             amount: 0,
-            error: 0
-            
+            error: 0,
+            addBntState: addBntDisabled,
+            redirectState: false
         }
     }
 
     handleAmountChange = (e) =>{
         var parsed = parseInt(e.target.value);
+        var newAddBntState = addBntDisabled;
         if (parsed){
+            if (parsed > 0) newAddBntState = {};
             this.setState({
-                amount: parsed
-            })
+                amount: parsed,
+                addBntState: newAddBntState
+            });
+        }
+        else {
+            this.setState({
+                addBntState: newAddBntState
+            });
         }
     }
 
-    addFood = (food) => {
-        var addedFood = {"amount": this.state.amount, "data": food};
+    addFood = (e) => {
+        var addedFood = {"amount": this.state.amount, "data": this.props.food};
         this.props.handleFoodAddition(addedFood);
+        this.setState({
+            redirectState: true
+        })
     }
 
     render(){
@@ -97,7 +114,8 @@ class SelectionTable extends Component {
                 }
                 var rowStyle = {};
                 if (thresholds[key] !== undefined) {
-                    var betterThanMedian = parseFloat(thresholds[key][category['name']].val) <= parseFloat(category['value']);
+                    var categoryValue =  parseFloat(thresholds[key][category['name']].val);
+                    var betterThanMedian = categoryValue <= parseFloat(category['value']) && categoryValue > 0;
                     if (betterThanMedian && thresholds[key][category['name']].i === undefined){
                         rowStyle = {"background": "#3D9970"};
                     }
@@ -117,17 +135,24 @@ class SelectionTable extends Component {
                         </table>
             tables.push(table);
         });
+        
+        if (this.state.redirectState){
+            return <Redirect to="/"/>       
+        }
 
         return (
             <TableContainer>
                 <RowBox>
                     <div style={selectedFoodStyle}>{food['food']['nameDk']}</div>
-                    <form><input 
+                    <form onSubmit={(e) => this.addFood(e)}>
+                        <input 
                             type="text"
                             amount={this.state.amount} 
                             onChange={this.handleAmountChange} 
-                            placeholder="amount"></input></form>
-                    <Link className="foodAddLink" to={"/"} style={linkStyle} value={food} onClick={() => this.addFood(food)}>Add</Link>
+                            placeholder="amount">
+                        </input>
+                        <button type="submit" className="foodAddLink" to={"/"} style={{...linkStyle, ...this.state.addBntState}} onClick={(e) => this.addFood(e)}>Add</button>
+                    </form>
                 </RowBox>
                 <div style={columnHeader}>Næringsindhold (100g)</div>
                 {tables}

@@ -7,6 +7,8 @@ import Axios from "axios";
 import { Route, Switch, Redirect } from "react-router";
 import SelectionTable from "./datatables/selectionTable";
 import AddedTable from "./datatables/addedTable";
+import Login from "./login/Login";
+import Signup from "./login/Signup";
 
 const CntWrapper = styled.div`
 grid-area: content;
@@ -52,7 +54,8 @@ class Content extends Component {
         var endPoint = process.env.REACT_APP_API_URL + food['id'];
         Axios.get(endPoint).then(response => {
             this.setState({
-                selectedFood: response.data
+                selectedFood: response.data,
+                query: ""
             });
         });
     }
@@ -95,19 +98,23 @@ class Content extends Component {
 
     render(){
         const {query} = this.state;
+
+        const searchBarTop = <CntWrapper2>
+                                <SearchBar
+                                    handleSubmit={this.handleSubmit} 
+                                    handleInputChange={this.handleInputChange} 
+                                    query={query}/>
+                            </CntWrapper2>;
+
         return (
             <CntWrapper>
-                <CntWrapper2>
-                    <SearchBar
-                        handleSubmit={this.handleSubmit} 
-                        handleInputChange={this.handleInputChange} 
-                        query={query}/>
-                </CntWrapper2>
                 <Switch>
                     <Route path="/foods/:id">
+                        {searchBarTop}
                         <SelectionTable food={this.state.selectedFood} handleFoodAddition={this.handleFoodAddition}></SelectionTable>
                     </Route>
                     <Route path="/search">
+                        {searchBarTop}
                         <SearchTable location={this.props.location} 
                                     data={this.state.data} query={this.state.query} 
                                     handleFoodSelection={this.handleFoodSelection}
@@ -115,7 +122,14 @@ class Content extends Component {
                         </SearchTable>
                     </Route>
                     <Route exact path="/">
+                        {searchBarTop}
                         {this.state.content}
+                    </Route>
+                    <Route exact path="/login">
+                        <Login />
+                    </Route>
+                    <Route exact path="/signup">
+                        <Signup />
                     </Route>
                 </Switch>
             </CntWrapper>

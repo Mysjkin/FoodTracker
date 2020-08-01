@@ -3,22 +3,23 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 
 const HeaderContainer = styled.div`
-grid-area: header;
-display: flex;
+    grid-area: header;
+    padding: 2rem 0;
+    background-color: #20232a;
+    width: 100%;
+    height: 100%;
 `;
 
 const Brand = styled.div`
-padding: 2rem 0;
-background-color: #20232a;
-width: 100%;
-height: 100%;
-text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const brandLinkStyle = {
-fontSize: '2rem',
-color: '#fff',
-cursor:'pointer'
+    fontSize: '2rem',
+    color: '#fff',
+    cursor:'pointer'
 };
 
 class Header extends Component {

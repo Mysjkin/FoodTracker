@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace IdentityAPI.Contracts.V1.Requests
 {
-    public class UserRegistrationRequest
+    public class UserLoginRequest
     {
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

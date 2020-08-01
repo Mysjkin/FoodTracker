@@ -2,6 +2,7 @@
 /.vs
 /FoodAPI/FoodAPI/appsettings.json
 /IdentityAPI/IdentityAPI/appsettings.json
+/StatisticsAPI/StatisticsAPI/appsettings.json
 *.swp
 *.*~
 project.lock.json

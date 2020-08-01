@@ -10,6 +10,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "react": "^16.13.0",
+    "react-bootstrap": "^0.33.1",
     "react-dom": "^16.13.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
