@@ -9,6 +9,9 @@ import SelectionTable from "./datatables/selectionTable";
 import AddedTable from "./datatables/addedTable";
 import Login from "./login/Login";
 import Signup from "./login/Signup";
+import { trackPromise } from 'react-promise-tracker';
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from 'react-loader-spinner';
 
 const CntWrapper = styled.div`
 grid-area: content;
@@ -21,6 +24,23 @@ flex-direction:row;
 justify-content: center;
 align-items: center;
 `;
+
+const LoadingIndicator = props => {
+    const { promiseInProgress } = usePromiseTracker();
+    
+    return ( promiseInProgress && 
+        <div
+            style={{
+            width: "100%",
+            height: "100",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+            }}>
+        <Loader type="ThreeDots" color="#82bef6" height="100" width="100" />
+        </div>
+    );  
+}
 
 class Content extends Component {
     constructor(props){
@@ -52,12 +72,12 @@ class Content extends Component {
 
     handleFoodSelection = (food) => {
         var endPoint = process.env.REACT_APP_API_URL + food['id'];
-        Axios.get(endPoint).then(response => {
+        trackPromise(Axios.get(endPoint).then(response => {
             this.setState({
                 selectedFood: response.data,
                 query: ""
             });
-        });
+        }));
     }
 
     handleFoodAddition = (food) => {
@@ -132,6 +152,7 @@ class Content extends Component {
                         <Signup />
                     </Route>
                 </Switch>
+                <LoadingIndicator />
             </CntWrapper>
         )
     }

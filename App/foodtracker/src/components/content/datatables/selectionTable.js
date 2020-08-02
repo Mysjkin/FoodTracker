@@ -84,18 +84,20 @@ class SelectionTable extends Component {
         }
     }
 
-    addFood = (e) => {
-        var addedFood = {"amount": this.state.amount, "data": this.props.food};
-        this.props.handleFoodAddition(addedFood);
-        this.setState({
-            redirectState: true
-        })
+    addFood = () => {
+        if (Number(this.state.amount) && this.state.amount > 0) {
+            var addedFood = {"amount": this.state.amount, "data": this.props.food};
+            this.props.handleFoodAddition(addedFood);
+            this.setState({
+                redirectState: true
+            })
+        }
     }
 
     render(){
         const {food, handleFoodAddition} = this.props;
         if (Object.keys(food).length === 0 && food.constructor === Object)
-            return <h1>Loading...</h1>
+            return <h1></h1>
         
         var tables = [];
         Object.keys(food).forEach(key => {
@@ -144,14 +146,14 @@ class SelectionTable extends Component {
             <TableContainer>
                 <RowBox>
                     <div style={selectedFoodStyle}>{food['food']['nameDk']}</div>
-                    <form onSubmit={(e) => this.addFood(e)}>
-                        <input 
+                    <form onSubmit={this.addFood}>
+                        <input
                             type="text"
                             amount={this.state.amount} 
                             onChange={this.handleAmountChange} 
                             placeholder="amount">
                         </input>
-                        <button type="submit" className="foodAddLink" to={"/"} style={{...linkStyle, ...this.state.addBntState}} onClick={(e) => this.addFood(e)}>Add</button>
+                        <button type="submit" className="foodAddLink" to={"/"} style={{...linkStyle, ...this.state.addBntState}} onClick={(e) => this.addFood}>Add</button>
                     </form>
                 </RowBox>
                 <div style={columnHeader}>Næringsindhold (100g)</div>

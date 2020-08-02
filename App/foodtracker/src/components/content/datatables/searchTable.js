@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 import {Link} from "react-router-dom";
 import Axios from "axios";
 import queryString from 'query-string';
+import { trackPromise } from 'react-promise-tracker';
 
 const TableContainer = styled.div`
 text-align: center;
@@ -39,13 +40,15 @@ class SearchTable extends Component {
 
     fetchSearchResults(query, pagenr) {
         var endPoint = process.env.REACT_APP_API_URL + "search?name=" + query + "&pageNumber=" + pagenr;
+        trackPromise(
             Axios.get(endPoint).then(response => {
                 this.setState({
                     data: response.data,
                     name: query,
                     pageNumber: pagenr
                 });
-            });
+            })
+        );
     }
 
     handleNextpage(){
@@ -82,7 +85,6 @@ class SearchTable extends Component {
         }
 
         var els = [];
-        if (!this.state.data.length) return <h1>Ingen resultater fundet</h1> 
         // onClick this way causes re-renders not really optimal. Fix later.
         this.state.data.forEach(el => {
             els.push(
