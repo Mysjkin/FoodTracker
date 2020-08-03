@@ -61,12 +61,14 @@ class AddedTable extends Component {
         var els = [];
         this.props.foods.forEach((el, index) => {
             els.push(
-            <RowBox>
+            /* Note, key is the index which is bad practice. */
+            <RowBox key={index}>
                 <button style={removeBntStyle} value={index} onClick={() => this.delete(index)}>
                     <i className="fas fa-times" />
                 </button>
-                <Link to={"/foods/"+el.data.food['id']} style={linkStyle} value={el.data} 
-                        onClick={() => handleAddedFoodSelection(el.data)}>{el.data.food['nameDk']}, {el.amount}g</Link>
+                <Link to={"/foods/"+el.data.food['id']} style={linkStyle} value={el.data}>
+                    {el.data.food['nameDk']}, {el.amount}g
+                </Link>
             </RowBox>);
         });
 
@@ -81,7 +83,8 @@ class AddedTable extends Component {
         Object.keys(trackingInfo).forEach(key => {
             Object.keys(trackingInfo[key]).forEach(label => {
                 var category = trackingInfo[key][label];
-                var tb = <TrackingBar label={label} 
+                var tb = <TrackingBar key={label+key}
+                                      label={label} 
                                       value={Math.round(category.value * 10) / 10} 
                                       progress={Math.round((category.value / category.goal * 100) * 10) / 10}
                                       indicator ={category.i}/>

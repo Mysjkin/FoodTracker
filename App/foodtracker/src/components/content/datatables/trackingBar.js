@@ -85,9 +85,7 @@ class TrackingBar extends Component {
                     </Bar>
                 </TrackingBox>
                 {this.state.showStats && this.state.chartData !== undefined &&
-                    <div style={{"display": "flex", "justify-content": "center", "align-items": "center"}}>
-                        <Chart options={this.state.chartData.options} series={this.state.chartData.series} height={320} />
-                    </div>}
+                        <Chart options={this.state.chartData.options} series={this.state.chartData.series} height={320}/>}
             </Fragment>
         )
     }

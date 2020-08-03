@@ -9,8 +9,6 @@ import SelectionTable from "./datatables/selectionTable";
 import AddedTable from "./datatables/addedTable";
 import Login from "./login/Login";
 import Signup from "./login/Signup";
-import { trackPromise } from 'react-promise-tracker';
-import LoadingIndicator from '../extra/LoadingIndicator'
 
 const CntWrapper = styled.div`
 grid-area: content;
@@ -23,7 +21,6 @@ class Content extends Component {
         this.state = {
             query: '',
             data: [],
-            selectedFood: {},
             addedFoods: [],
             content: <BasicMain />
         };
@@ -46,15 +43,6 @@ class Content extends Component {
                 query: ''
             });
         }
-    }
-
-    handleFoodSelection = (food) => {
-        var endPoint = process.env.REACT_APP_API_URL + food['id'];
-        trackPromise(Axios.get(endPoint).then(response => {
-            this.setState({
-                selectedFood: response.data
-            });
-        }));
     }
 
     handleFoodAddition = (food) => {
@@ -87,12 +75,6 @@ class Content extends Component {
         });
     }
 
-    handleAddedFoodSelection = (food) => {
-        this.setState({
-            selectedFood: food
-        })
-    }
-
     render(){
         var searchBarTop = 
             <SearchBar 
@@ -105,8 +87,9 @@ class Content extends Component {
                 <Switch>
                     <Route path="/foods/:id">
                         {searchBarTop}
-                        <SelectionTable food={this.state.selectedFood} handleFoodAddition={this.handleFoodAddition}></SelectionTable>
-                        <LoadingIndicator />
+                        <SelectionTable
+                            handleFoodAddition={this.handleFoodAddition}
+                            history={this.props.history}></SelectionTable>
                     </Route>
                     <Route path="/search">
                         {searchBarTop}

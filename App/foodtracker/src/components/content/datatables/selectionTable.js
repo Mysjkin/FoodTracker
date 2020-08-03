@@ -3,6 +3,9 @@ import styled from "styled-components";
 import {Link, Redirect} from "react-router-dom";
 import './selectionTable.css';
 import {thresholds} from './thresholdValues.js';
+import { trackPromise } from 'react-promise-tracker';
+import LoadingIndicator from '../../extra/LoadingIndicator'
+import Axios from "axios";
 
 const TableContainer = styled.div`
     text-align: center;
@@ -39,11 +42,11 @@ const inputStyle = {
 "border-radius": "6px",
 "background-color": "#fff",
 "border":"1px solid grey",
-"padding":"2px"
+"padding":"0px"
 }
 
 const addBntDisabled = {
-    "pointer-events": "none",
+    "pointerEvents": "none",
     "color": "white",
     "background-color": "grey"
 }
@@ -61,7 +64,7 @@ const columnHeader = {
     "fontWeight": "bold",
     "textAlign": "left",
     "margin-bottom": "10px",
-    "margin-left":"5px"
+    "marginLeft":"5px"
 }
 
 class SelectionTable extends Component {
@@ -69,6 +72,8 @@ class SelectionTable extends Component {
     constructor(props){
         super(props);
         this.state = {
+            selectedFood: {},
+            fetchedId: -1,
             amount: 0,
             error: 0,
             addBntState: addBntDisabled,
@@ -95,7 +100,7 @@ class SelectionTable extends Component {
 
     addFood = () => {
         if (Number(this.state.amount) && this.state.amount > 0) {
-            var addedFood = {"amount": this.state.amount, "data": this.props.food};
+            var addedFood = {"amount": this.state.amount, "data": this.state.selectedFood};
             this.props.handleFoodAddition(addedFood);
             this.setState({
                 redirectState: true
@@ -103,11 +108,34 @@ class SelectionTable extends Component {
         }
     }
 
+    componentDidMount(){
+        let foodId = this.props.history.location.pathname.split('/')[2];
+
+        if (this.state.fetchedId !== foodId) {
+            this.fetchFoodFromUrl(foodId);
+        }
+    }
+
+    fetchFoodFromUrl(foodId){
+        if(Number(foodId) && foodId > 0){
+            var endPoint = process.env.REACT_APP_API_URL + foodId;
+            trackPromise(Axios.get(endPoint).then(response => {
+                this.setState({
+                    selectedFood: response.data,
+                    fetchedId: foodId
+                });
+            }));
+        }
+    }
+
     render(){
-        const {food, handleFoodAddition} = this.props;
+        const {handleFoodAddition, history} = this.props;
+
+        const food = this.state.selectedFood;
+
         if (Object.keys(food).length === 0 && food.constructor === Object)
             return <h1></h1>
-        
+
         var tables = [];
         Object.keys(food).forEach(key => {
             if (key === 'food' || key === 'id' || key === 'nameDk') { return; }
@@ -136,7 +164,7 @@ class SelectionTable extends Component {
                 }
             tablebody.push(<tr key={category['id']} style={rowStyle}><td>{category['name']}</td><td>{category['value']}</td><td>{unit}</td></tr>)
             });
-            var table = <table>
+            var table = <table key={key}>
                             <thead>
                                 <tr><th>{key.toUpperCase()}</th><th>Value</th><th>Unit</th></tr>
                             </thead>
@@ -168,6 +196,7 @@ class SelectionTable extends Component {
                 </RowBox>
                 <div style={columnHeader}>Næringsindhold (100g)</div>
                 {tables}
+                <LoadingIndicator />
             </TableContainer>
         )
     }

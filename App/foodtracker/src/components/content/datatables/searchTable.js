@@ -29,7 +29,7 @@ const pageBntStyle = {
     "display":"inline-block",
     "padding":"0.6em 2em",
     "margin":"0.5em 0.3em 0.3em 0.2em",
-    "border-radius":"2em",
+    "borderRadius":"2em",
     "box-sizing": "border-box",
     "font-size": "12px",
     "font-family":"'Roboto',sans-serif",
@@ -52,6 +52,17 @@ class SearchTable extends Component {
             data: [],
             name: "",
             pageNumber: 1
+        }
+        const {location, handleFoodSelection} = this.props;
+        
+        const search = location.search;
+        var searchParams = queryString.parse(search);
+        var n = searchParams.name;
+        var pgnr = parseInt(searchParams.pageNumber);
+        if (n !== undefined && pgnr !== undefined
+            && (n !== this.state.name || pgnr !== this.state.pageNumber)){
+            
+            this.fetchSearchResults(n, pgnr);
         }
     }
 
@@ -88,8 +99,8 @@ class SearchTable extends Component {
         }
     }
 
-    render(){
-        const {location, handleFoodSelection} = this.props;
+    componentDidMount(){
+        const location = this.props.history;
         
         const search = location.search;
         var searchParams = queryString.parse(search);
@@ -97,16 +108,19 @@ class SearchTable extends Component {
         var pgnr = parseInt(searchParams.pageNumber);
         if (n !== undefined && pgnr !== undefined
             && (n !== this.state.name || pgnr !== this.state.pageNumber)){
-            
             this.fetchSearchResults(n, pgnr);
         }
+    }
+
+    render(){
+        const handleFoodSelection = this.props.handleFoodSelection;
 
         var els = [];
         // onClick this way causes re-renders not really optimal. Fix later.
         this.state.data.forEach(el => {
             els.push(
             <RowBox key={el['id']}>
-                <Link to={"foods/"+el['id']} style={linkStyle} value={el} onClick={() => handleFoodSelection(el)}>{el['nameDk']}</Link> 
+                <Link to={"foods/"+el['id']} style={linkStyle} value={el}>{el['nameDk']}</Link> 
                 <div>Pr. 100g</div> 
                 <div>
                     Kcal: {el['kcal']} <ElSpan>-</ElSpan> Protein: {el['protein']} <ElSpan>-</ElSpan> Kulhydrater: {el['carbs']} <ElSpan>-</ElSpan> Fedt: {el['fat']}

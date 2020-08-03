@@ -5,8 +5,7 @@ class MockFoodData {
         this.chartData = {
             options: {
                 chart: {
-                    id: 'apexchart-example',
-                    width: '100%'
+                    id: 'apexchart-example'
                 },
                 xaxis: {
                     categories: [1, 2, 3, 4, 5, 6, 7]
