@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import styled from "styled-components";
-import { Redirect } from 'react-router';
 import {Link} from "react-router-dom";
 import Axios from "axios";
 import queryString from 'query-string';
 import { trackPromise } from 'react-promise-tracker';
+import LoadingIndicator from '../../extra/LoadingIndicator'
 
 const TableContainer = styled.div`
 text-align: center;
@@ -99,7 +99,13 @@ class SearchTable extends Component {
         return (
             <TableContainer>
                 {els}
-                <button onClick={() => this.handlePrevPage()}>Prev</button><button onClick={() => this.handleNextpage()}>Next</button>
+                {els.length > 0 &&
+                 <Fragment>
+                    <button onClick={() => this.handlePrevPage()}>Prev</button>
+                    <button onClick={() => this.handleNextpage()}>Next</button>
+                 </Fragment>
+                }
+                <LoadingIndicator />
             </TableContainer>
         )
     }

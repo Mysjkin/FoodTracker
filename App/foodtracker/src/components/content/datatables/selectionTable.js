@@ -30,7 +30,8 @@ const linkStyle = {
     "transition": "all 0.2s",
     "float": "center",
     "color": "#FFFFFF",
-    "background-color": "#82bef6"
+    "background-color": "#82bef6",
+    "border": "none"
 }
 
 const addBntDisabled = {

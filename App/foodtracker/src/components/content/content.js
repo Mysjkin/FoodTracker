@@ -10,37 +10,12 @@ import AddedTable from "./datatables/addedTable";
 import Login from "./login/Login";
 import Signup from "./login/Signup";
 import { trackPromise } from 'react-promise-tracker';
-import { usePromiseTracker } from "react-promise-tracker";
-import Loader from 'react-loader-spinner';
+import LoadingIndicator from '../extra/LoadingIndicator'
 
 const CntWrapper = styled.div`
 grid-area: content;
 margin: 0px;
 `;
-
-const CntWrapper2 = styled.div`
-display:flex;
-flex-direction:row;
-justify-content: center;
-align-items: center;
-`;
-
-const LoadingIndicator = props => {
-    const { promiseInProgress } = usePromiseTracker();
-    
-    return ( promiseInProgress && 
-        <div
-            style={{
-            width: "100%",
-            height: "100",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-            }}>
-        <Loader type="ThreeDots" color="#82bef6" height="100" width="100" />
-        </div>
-    );  
-}
 
 class Content extends Component {
     constructor(props){
@@ -65,8 +40,11 @@ class Content extends Component {
         var query = this.state.query;
         var trimed = query.trimLeft();
         if (trimed !== ""){
-            var searchQuery = "/search?name="+trimed+"&pageNumber=1";
-            this.props.history.push(searchQuery);
+            var search = "/search?name="+trimed+"&pageNumber=1";
+            this.props.history.push(search);
+            this.setState({
+                query: ''
+            });
         }
     }
 
@@ -74,8 +52,7 @@ class Content extends Component {
         var endPoint = process.env.REACT_APP_API_URL + food['id'];
         trackPromise(Axios.get(endPoint).then(response => {
             this.setState({
-                selectedFood: response.data,
-                query: ""
+                selectedFood: response.data
             });
         }));
     }
@@ -117,14 +94,11 @@ class Content extends Component {
     }
 
     render(){
-        const {query} = this.state;
-
-        const searchBarTop = <CntWrapper2>
-                                <SearchBar
-                                    handleSubmit={this.handleSubmit} 
-                                    handleInputChange={this.handleInputChange} 
-                                    query={query}/>
-                            </CntWrapper2>;
+        var searchBarTop = 
+            <SearchBar 
+                handleSubmit={this.handleSubmit} 
+                handleInputChange={this.handleInputChange} 
+                query={this.state.query}/>
 
         return (
             <CntWrapper>
@@ -132,13 +106,14 @@ class Content extends Component {
                     <Route path="/foods/:id">
                         {searchBarTop}
                         <SelectionTable food={this.state.selectedFood} handleFoodAddition={this.handleFoodAddition}></SelectionTable>
+                        <LoadingIndicator />
                     </Route>
                     <Route path="/search">
                         {searchBarTop}
                         <SearchTable location={this.props.location} 
-                                    data={this.state.data} query={this.state.query} 
-                                    handleFoodSelection={this.handleFoodSelection}
-                                    history={this.props.history}>
+                            data={this.state.data}
+                            handleFoodSelection={this.handleFoodSelection}
+                            history={this.props.history}>
                         </SearchTable>
                     </Route>
                     <Route exact path="/">
@@ -152,7 +127,6 @@ class Content extends Component {
                         <Signup />
                     </Route>
                 </Switch>
-                <LoadingIndicator />
             </CntWrapper>
         )
     }

@@ -1,6 +1,8 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import styled from "styled-components";
 import "./trackingbarstyle.css";
+import MockFoodData from "./MockStats";
+import Chart from 'react-apexcharts'
 
 const TrackingBox = styled.div`
 box-sizing: border-box;
@@ -23,11 +25,38 @@ border-radius: 40px;
 width: ${props => props.progress}%;
 `;
 
+const TopBar = styled.div`
+box-sizing: border-box;
+height: 10px;
+width: 100%;
+`;
+
 class TrackingBar extends Component {
 
     constructor(props){
         super(props);
+
+        this.state = {
+            showStats: false,
+            chartData: {}
+        }
     }
+
+    handleExpand = () => {
+        if (this.state.showStats) {
+            this.setState({
+                showStats: false
+            });
+        }
+        else {
+            var stats = new MockFoodData;
+            let data = stats.getData()
+            this.setState({
+                showStats: true,
+                chartData: data
+            });
+        }
+    } 
 
     render(){
         const {label, value, progress, indicator} = this.props;
@@ -42,14 +71,25 @@ class TrackingBar extends Component {
                 color = "#FF4136";
             }
         }
-    return <TrackingBox>
-                <p>{label}</p> 
-                <p>{value}</p>
-                <p>{progress}%</p>
-                <Bar>
-                    <BarLevel progress={reached} color={color}/>
-                </Bar>
-            </TrackingBox>
+        return ( 
+            <Fragment>
+                <TrackingBox>
+                    <TopBar>
+                        <p>{label}</p> 
+                        <p>{value}</p>
+                        <p>{progress}%</p>
+                        <button className="statistics" onClick={this.handleExpand}>Expand</button>
+                    </TopBar>
+                    <Bar>
+                        <BarLevel progress={reached} color={color}/>
+                    </Bar>
+                </TrackingBox>
+                {this.state.showStats && this.state.chartData !== undefined &&
+                    <div style={{"display": "flex", "justify-content": "center", "align-items": "center"}}>
+                        <Chart options={this.state.chartData.options} series={this.state.chartData.series} height={320} />
+                    </div>}
+            </Fragment>
+        )
     }
 }
 

@@ -24,3 +24,18 @@ position: relative;
 top: -16px;
 left: 20px;
 }
+
+.statistics {
+color: #82bef6;
+margin: 0 0 0 10px;
+margin-right: 5px;
+padding: 0px;
+font-size: 10px;
+letter-spacing: 1px;
+float: right;
+position: relative;
+top: -10px;
+left: -0px;
+border: none;
+background: none;
+}

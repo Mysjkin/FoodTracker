@@ -2,6 +2,13 @@ import React, {Component} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
+const CntWrapper2 = styled.div`
+display:flex;
+flex-direction:row;
+justify-content: center;
+align-items: center;
+`;
+
 const SearchWrapper = styled.div`
 margin-top: 20px;
 width: 80%;
@@ -56,21 +63,23 @@ class SearchBar extends Component {
     }
 
     render(){
-        const {handleSubmit, handleInputChange, query} = this.props;
+        const {handleSubmit, handleInputChange} = this.props;
         return (
-            <SearchWrapper>
-                <SearchBtn>
-                    <Link to={"/search?name="+query} onClick={(e) => handleSubmit(e)}>
-                        <i style={searchBntStyle} className="fas fa-search fa-2x"></i>
-                    </Link>
-                </SearchBtn>
-                <form style={formStyle}
-                    onSubmit={(e) => handleSubmit(e)}>
-                    <input type="text" style={inputStyle} placeholder="Search.."
-                    onChange={handleInputChange}
-                    query={query}/>
-                </form>
-            </SearchWrapper>
+            <CntWrapper2>
+                <SearchWrapper>
+                    <SearchBtn>
+                        <Link to={"/search?name="+this.props.query} onClick={(e) => handleSubmit(e)}>
+                            <i style={searchBntStyle} className="fas fa-search fa-2x"></i>
+                        </Link>
+                    </SearchBtn>
+                    <form style={formStyle}
+                        onSubmit={(e) => handleSubmit(e)}>
+                        <input type="text" style={inputStyle} placeholder="Search.."
+                        onChange={handleInputChange}
+                        value={this.props.query}/>
+                    </form>
+                </SearchWrapper>
+            </CntWrapper2>
         )
     }
 }
