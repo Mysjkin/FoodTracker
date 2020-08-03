@@ -19,8 +19,8 @@ const RowBox = styled.div`
 
 const linkStyle = {
     "display":"inline-block",
-    "padding":"0.6em 2em",
-    "margin":"0.5em 0.3em 0.3em 0.2em",
+    "padding":"0.5em 2em",
+    "margin":"0.3em 0.3em 0.3em 0.5em",
     "border-radius":"2em",
     "box-sizing": "border-box",
     "font-size": "12px",
@@ -32,6 +32,14 @@ const linkStyle = {
     "color": "#FFFFFF",
     "background-color": "#82bef6",
     "border": "none"
+}
+
+const inputStyle = {
+"text-align": "center",
+"border-radius": "6px",
+"background-color": "#fff",
+"border":"1px solid grey",
+"padding":"2px"
 }
 
 const addBntDisabled = {
@@ -149,10 +157,11 @@ class SelectionTable extends Component {
                     <div style={selectedFoodStyle}>{food['food']['nameDk']}</div>
                     <form onSubmit={this.addFood}>
                         <input
-                            type="text"
-                            amount={this.state.amount} 
-                            onChange={this.handleAmountChange} 
-                            placeholder="amount">
+                            style = {inputStyle}
+                            type = "text"
+                            amount = {this.state.amount} 
+                            onChange = {this.handleAmountChange} 
+                            placeholder = "Amount">
                         </input>
                         <button type="submit" className="foodAddLink" to={"/"} style={{...linkStyle, ...this.state.addBntState}} onClick={(e) => this.addFood}>Add</button>
                     </form>

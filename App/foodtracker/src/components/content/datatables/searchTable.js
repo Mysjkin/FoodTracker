@@ -25,6 +25,23 @@ const linkStyle = {
     "fontWeight": "500"
 }
 
+const pageBntStyle = {
+    "display":"inline-block",
+    "padding":"0.6em 2em",
+    "margin":"0.5em 0.3em 0.3em 0.2em",
+    "border-radius":"2em",
+    "box-sizing": "border-box",
+    "font-size": "12px",
+    "font-family":"'Roboto',sans-serif",
+    "font-weight":"300",
+    "text-align":"center",
+    "transition": "all 0.2s",
+    "float": "center",
+    "color": "#FFFFFF",
+    "background-color": "#20232a",
+    "border": "none"
+}
+
 const ElSpan = styled.span``;
 
 class SearchTable extends Component {
@@ -101,8 +118,8 @@ class SearchTable extends Component {
                 {els}
                 {els.length > 0 &&
                  <Fragment>
-                    <button onClick={() => this.handlePrevPage()}>Prev</button>
-                    <button onClick={() => this.handleNextpage()}>Next</button>
+                    <button style={pageBntStyle} onClick={() => this.handlePrevPage()}>Prev</button>
+                    <button style={pageBntStyle} onClick={() => this.handleNextpage()}>Next</button>
                  </Fragment>
                 }
                 <LoadingIndicator />
