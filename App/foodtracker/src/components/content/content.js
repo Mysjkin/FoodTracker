@@ -3,12 +3,10 @@ import styled from "styled-components";
 import SearchBar from "./searchbar/searchbar"
 import BasicMain from "./main/basicMain"
 import SearchTable from "./datatables/searchTable"
-import Axios from "axios";
 import { Route, Switch, Redirect } from "react-router";
 import SelectionTable from "./datatables/selectionTable";
 import AddedTable from "./datatables/addedTable";
-import Login from "./login/Login";
-import Signup from "./login/Signup";
+import LoadingIndicator from '../extra/LoadingIndicator'
 
 const CntWrapper = styled.div`
 grid-area: content;
@@ -89,7 +87,9 @@ class Content extends Component {
                         {searchBarTop}
                         <SelectionTable
                             handleFoodAddition={this.handleFoodAddition}
-                            history={this.props.history}></SelectionTable>
+                            history={this.props.history}>
+                        </SelectionTable>
+                        <LoadingIndicator/>
                     </Route>
                     <Route path="/search">
                         {searchBarTop}
@@ -102,12 +102,6 @@ class Content extends Component {
                     <Route exact path="/">
                         {searchBarTop}
                         {this.state.content}
-                    </Route>
-                    <Route exact path="/login">
-                        <Login />
-                    </Route>
-                    <Route exact path="/signup">
-                        <Signup />
                     </Route>
                 </Switch>
             </CntWrapper>

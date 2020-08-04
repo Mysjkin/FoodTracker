@@ -4,7 +4,6 @@ import {Link, Redirect} from "react-router-dom";
 import './selectionTable.css';
 import {thresholds} from './thresholdValues.js';
 import { trackPromise } from 'react-promise-tracker';
-import LoadingIndicator from '../../extra/LoadingIndicator'
 import Axios from "axios";
 
 const TableContainer = styled.div`
@@ -129,8 +128,6 @@ class SelectionTable extends Component {
     }
 
     render(){
-        const {handleFoodAddition, history} = this.props;
-
         const food = this.state.selectedFood;
 
         if (Object.keys(food).length === 0 && food.constructor === Object)
@@ -196,7 +193,6 @@ class SelectionTable extends Component {
                 </RowBox>
                 <div style={columnHeader}>Næringsindhold (100g)</div>
                 {tables}
-                <LoadingIndicator />
             </TableContainer>
         )
     }
