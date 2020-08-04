@@ -1,12 +1,11 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import { Redirect } from 'react-router';
 import {Link} from "react-router-dom";
 import TrackingBar from "./trackingBar";
 import Tracker from "./tracker";
 
 const TableContainer = styled.div`
-text-align: center;
+    text-align: center;
 `;
 
 const TrackingBarContainer = styled.div`
@@ -14,34 +13,28 @@ const TrackingBarContainer = styled.div`
 `;
 
 const RowBox = styled.div`
-width: 100%;
-padding-top: 10px;
-padding-bottom: 10px;
-font-size: 12px;
-border-bottom: 1px solid #eeeeee;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 12px;
+    border-bottom: 1px solid #eeeeee;
 `;
 
 const linkStyle = {
-"color": "#20232a",
-"fontSize": "16px",
-"fontWeight": "500"
+    "color": "#20232a",
+    "fontSize": "16px",
+    "fontWeight": "500"
 }
 
 const removeBntStyle = {
-"lineHeight": "12px",
-"width": "18px",
-"textAlign": "center",
-"background": "white",
-"textDecoration":"none",
-"border": "none",
-"float": "right"
+    "lineHeight": "12px",
+    "width": "18px",
+    "textAlign": "center",
+    "background": "white",
+    "textDecoration":"none",
+    "border": "none",
+    "float": "right"
 }
-
-const removeIconStyle = {
-
-}
-
-const ElSpan = styled.span``;
 
 class AddedTable extends Component {
 
@@ -51,19 +44,18 @@ class AddedTable extends Component {
         this.tracker.updateTracker(this.props.foods);
     }
 
-    delete(index){
+    deleteFoodFromAddedTable(index){
         this.tracker.removeFromTracker(index, this.props.foods);
         this.props.handleFoodRemoval(index);
     }
 
     render(){
-        const {handleAddedFoodSelection, handleFoodRemoval} = this.props;
         var els = [];
         this.props.foods.forEach((el, index) => {
             els.push(
             /* Note, key is the index which is bad practice. */
             <RowBox key={index}>
-                <button style={removeBntStyle} value={index} onClick={() => this.delete(index)}>
+                <button style={removeBntStyle} value={index} onClick={() => this.deleteFoodFromAddedTable(index)}>
                     <i className="fas fa-times" />
                 </button>
                 <Link to={"/foods/"+el.data.food['id']} style={linkStyle} value={el.data}>
@@ -88,9 +80,8 @@ class AddedTable extends Component {
                                       value={Math.round(category.value * 10) / 10} 
                                       progress={Math.round((category.value / category.goal * 100) * 10) / 10}
                                       indicator ={category.i}/>
-                if (trackingBars[key] !== undefined){
-                    trackingBars[key].push(tb);
-                }
+                
+                if (trackingBars[key] !== undefined) trackingBars[key].push(tb);
             });
         });
 

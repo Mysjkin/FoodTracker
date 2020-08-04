@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import './selectionTable.css';
 import {thresholds} from './thresholdValues.js';
 import { trackPromise } from 'react-promise-tracker';
@@ -24,11 +24,11 @@ const linkStyle = {
     "padding":"0.5em 2em",
     "margin":"0.3em 0.3em 0.3em 0.5em",
     "border-radius":"2em",
-    "box-sizing": "border-box",
-    "font-size": "12px",
-    "font-family":"'Roboto',sans-serif",
-    "font-weight":"300",
-    "text-align":"center",
+    "boxSizing": "border-box",
+    "fontSize": "12px",
+    "fontFamily":"'Roboto',sans-serif",
+    "fontWeight":"300",
+    "textAlign":"center",
     "transition": "all 0.2s",
     "float": "center",
     "color": "#FFFFFF",
@@ -37,11 +37,12 @@ const linkStyle = {
 }
 
 const inputStyle = {
-"text-align": "center",
-"border-radius": "6px",
-"background-color": "#fff",
-"border":"1px solid grey",
-"padding":"0px"
+    "textAlign": "center",
+    "borderRadius": "6px",
+    "backgroundColor": "#fff",
+    "border":"1px solid grey",
+    "padding":"0px",
+    "height": "22px"
 }
 
 const addBntDisabled = {
@@ -56,13 +57,11 @@ const selectedFoodStyle = {
     "fontWeight": "500"
 }
 
-const elSpan = styled.span``;
-
 const columnHeader = {
     "fontSize": "16px",
     "fontWeight": "bold",
     "textAlign": "left",
-    "margin-bottom": "10px",
+    "marginBottom": "10px",
     "marginLeft":"5px"
 }
 
@@ -84,7 +83,7 @@ class SelectionTable extends Component {
         var parsed = parseInt(e.target.value);
         var newAddBntState = addBntDisabled;
         if (parsed){
-            if (parsed > 0) newAddBntState = {};
+            if (parsed > 0 && parsed < 100000) newAddBntState = {};
             this.setState({
                 amount: parsed,
                 addBntState: newAddBntState
@@ -98,7 +97,7 @@ class SelectionTable extends Component {
     }
 
     addFood = () => {
-        if (Number(this.state.amount) && this.state.amount > 0) {
+        if (Number(this.state.amount) && this.state.amount > 0 && this.state.amount < 100000) {
             var addedFood = {"amount": this.state.amount, "data": this.state.selectedFood};
             this.props.handleFoodAddition(addedFood);
             this.setState({
@@ -131,15 +130,16 @@ class SelectionTable extends Component {
         const food = this.state.selectedFood;
 
         if (Object.keys(food).length === 0 && food.constructor === Object)
-            return <h1></h1>
+            return <h1></h1>;
 
         var tables = [];
         Object.keys(food).forEach(key => {
-            if (key === 'food' || key === 'id' || key === 'nameDk') { return; }
+            if (key === 'food' || key === 'id' || key === 'nameDk') return;
 
-            if (food[key] === null) { return; }
+            if (food[key] === null) return;
 
             var tablebody = [];
+            /*  */
             food[key].forEach(category => {
                 var unit = category['unit'];
                 if (unit === undefined) {
@@ -149,17 +149,22 @@ class SelectionTable extends Component {
                     else unit = "unknown";
                 }
                 var rowStyle = {};
-                if (thresholds[key] !== undefined) {
-                    var categoryValue =  parseFloat(thresholds[key][category['name']].val);
-                    var betterThanMedian = categoryValue <= parseFloat(category['value']) && categoryValue > 0;
-                    if (betterThanMedian && thresholds[key][category['name']].i === undefined){
-                        rowStyle = {"background": "#3D9970"};
-                    }
-                    else if (betterThanMedian && thresholds[key][category['name']].i === -1){
-                        rowStyle = {"background": "#FF4136"};
-                    }
+
+                if (thresholds[key] === undefined) return
+
+                /* Set different style based on how they compare to the median of other foods
+                   where the category is not zero. And set different color based on indicator
+                   i. */
+                var categoryValue =  parseFloat(thresholds[key][category['name']].val);
+                var betterThanMedian = categoryValue <= parseFloat(category['value']) && categoryValue > 0;
+                if (betterThanMedian && thresholds[key][category['name']].i === undefined){
+                    rowStyle = {"background": "#3D9970"};
                 }
-            tablebody.push(<tr key={category['id']} style={rowStyle}><td>{category['name']}</td><td>{category['value']}</td><td>{unit}</td></tr>)
+                else if (betterThanMedian && thresholds[key][category['name']].i === -1){
+                    rowStyle = {"background": "#FF4136"};
+                }
+
+                tablebody.push(<tr key={category['id']} style={rowStyle}><td>{category['name']}</td><td>{category['value']}</td><td>{unit}</td></tr>)
             });
             var table = <table key={key}>
                             <thead>

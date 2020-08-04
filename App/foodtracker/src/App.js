@@ -7,10 +7,6 @@ import { BrowserRouter, Route } from "react-router-dom";
 require('dotenv').config()
 
 class App extends Component{
-    constructor(props){
-        super(props);
-    }
-
     render(){
         return (
             <BrowserRouter>

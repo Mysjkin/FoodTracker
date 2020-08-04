@@ -5,30 +5,30 @@ import MockFoodData from "./MockStats";
 import Chart from 'react-apexcharts'
 
 const TrackingBox = styled.div`
-box-sizing: border-box;
-width: 100%;
-margin: 30px 0;
-text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 30px 0;
+    text-align: center;
 `;
 
 const Bar = styled.div`
-background: #20232a;
-padding: 2px;
-box-sizing: border-box;
-border-radius: 40px;
+    background: #20232a;
+    padding: 2px;
+    box-sizing: border-box;
+    border-radius: 40px;
 `;
 
 const BarLevel = styled.div`
-background: ${props => props.color};
-height: 10px;
-border-radius: 40px;
-width: ${props => props.progress}%;
+    background: ${props => props.color};
+    height: 10px;
+    border-radius: 40px;
+    width: ${props => props.progress}%;
 `;
 
 const TopBar = styled.div`
-box-sizing: border-box;
-height: 10px;
-width: 100%;
+    box-sizing: border-box;
+    height: 10px;
+    width: 100%;
 `;
 
 class TrackingBar extends Component {
@@ -49,7 +49,7 @@ class TrackingBar extends Component {
             });
         }
         else {
-            var stats = new MockFoodData;
+            var stats = new MockFoodData();
             let data = stats.getData()
             this.setState({
                 showStats: true,

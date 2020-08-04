@@ -87,8 +87,8 @@ class Tracker {
         const data = foods[index].data;
         const amount = foods[index].amount;
         Object.keys(data).forEach(key =>{
-            if (key === 'food' || key === 'id' || key === 'nameDk') { return; }
-            if (data[key] === null) { return; }
+            if (key === 'food' || key === 'id' || key === 'nameDk') return;
+            if (data[key] === null) return;
             data[key].forEach(el =>{
                 if (this.trackingInfo[key] !== undefined && this.trackingInfo[key][el.name] !== undefined){
                     this.trackingInfo[key][el.name].value -= (el.value * amount / 100);
@@ -99,11 +99,11 @@ class Tracker {
 
     updateTracker(foods){
         for (const food of foods){
-            var data = food.data;
-            var amount = food.amount;
+            let data = food.data;
+            let amount = food.amount;
             Object.keys(data).forEach(key =>{
-                if (key === 'food' || key === 'id' || key === 'nameDk') { return; }
-                if (data[key] === null) { return; }
+                if (key === 'food' || key === 'id' || key === 'nameDk') return;
+                if (data[key] === null) return;
                 data[key].forEach(el =>{
                     if (this.trackingInfo[key] !== undefined && this.trackingInfo[key][el.name] !== undefined){
                         this.trackingInfo[key][el.name].value += (el.value * amount / 100);

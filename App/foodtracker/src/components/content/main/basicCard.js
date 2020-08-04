@@ -34,7 +34,7 @@ class BasicCard extends Component {
         return (
             <Card>
                 <CardText>
-                    <img src="food.svg" style={foodIconStyle} height="100" width="100"/>
+                    <img alt="foods" src="food.svg" style={foodIconStyle} height="100" width="100"/>
                     <h4>Madanalyse</h4>
                     <h6 style={cardTextParagrafStyle}>Du har endnu ikke tilføjet nogen madvare.</h6>
                 </CardText>

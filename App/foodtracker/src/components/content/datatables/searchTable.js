@@ -7,17 +7,17 @@ import { trackPromise } from 'react-promise-tracker';
 import LoadingIndicator from '../../extra/LoadingIndicator'
 
 const TableContainer = styled.div`
-text-align: center;
-margin-bottom: 80px;
+    text-align: center;
+    marginBottom: 80px;
 `;
 
 const RowBox = styled.div`
-width: 100%;
-padding-top: 16px;
-padding-bottom: 8px;
-font-size: 12px;
-border-bottom: 1px solid #eeeeee;
-`;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #eeeeee;
+    `;
 
 const linkStyle = {
     "color": "#20232a",
@@ -51,29 +51,20 @@ class SearchTable extends Component {
         this.state = {
             data: [],
             name: "",
-            pageNumber: 1
-        }
-        const {location, handleFoodSelection} = this.props;
-        
-        const search = location.search;
-        var searchParams = queryString.parse(search);
-        var n = searchParams.name;
-        var pgnr = parseInt(searchParams.pageNumber);
-        if (n !== undefined && pgnr !== undefined
-            && (n !== this.state.name || pgnr !== this.state.pageNumber)){
-            
-            this.fetchSearchResults(n, pgnr);
+            pageNumber: -1,
+            prevSearchName: ""
         }
     }
 
-    fetchSearchResults(query, pagenr) {
-        var endPoint = process.env.REACT_APP_API_URL + "search?name=" + query + "&pageNumber=" + pagenr;
+    fetchSearchResults(query, pageNumber) {
+        var endPoint = process.env.REACT_APP_API_URL + "search?name=" + query + "&pageNumber=" + pageNumber;
         trackPromise(
             Axios.get(endPoint).then(response => {
                 this.setState({
                     data: response.data,
                     name: query,
-                    pageNumber: pagenr
+                    pageNumber: pageNumber,
+                    prevSearchName: this.props.history.location.search
                 });
             })
         );
@@ -99,22 +90,38 @@ class SearchTable extends Component {
         }
     }
 
-    componentDidMount(){
-        const location = this.props.history;
-        
-        const search = location.search;
+    getSearchNameAndPageNumber() {
+        const search = this.props.history.location.search;
+
         var searchParams = queryString.parse(search);
-        var n = searchParams.name;
-        var pgnr = parseInt(searchParams.pageNumber);
-        if (n !== undefined && pgnr !== undefined
-            && (n !== this.state.name || pgnr !== this.state.pageNumber)){
-            this.fetchSearchResults(n, pgnr);
+        var searchName = searchParams.name;
+        var pageNumber = parseInt(searchParams.pageNumber);
+
+        return [searchName, pageNumber];
+    }
+
+    componentDidMount() {
+        const searchInfo = this.getSearchNameAndPageNumber();
+        var searchName = searchInfo[0];
+        var pageNumber = searchInfo[1];
+
+        if (searchName === undefined || pageNumber === undefined) return;
+
+        this.fetchSearchResults(searchName, pageNumber);
+    }
+
+    componentDidUpdate() {
+        if (this.props.history === undefined) return;
+
+        if (this.state.prevSearchName !== this.props.history.location.search) {
+            const searchInfo = this.getSearchNameAndPageNumber();
+            var searchName = searchInfo[0];
+            var pageNumber = searchInfo[1];
+            this.fetchSearchResults(searchName, pageNumber);
         }
     }
 
     render(){
-        const handleFoodSelection = this.props.handleFoodSelection;
-
         var els = [];
         // onClick this way causes re-renders not really optimal. Fix later.
         this.state.data.forEach(el => {
@@ -129,6 +136,7 @@ class SearchTable extends Component {
         });
         return (
             <TableContainer>
+                <LoadingIndicator />
                 {els}
                 {els.length > 0 &&
                  <Fragment>
@@ -136,7 +144,6 @@ class SearchTable extends Component {
                     <button style={pageBntStyle} onClick={() => this.handleNextpage()}>Next</button>
                  </Fragment>
                 }
-                <LoadingIndicator />
             </TableContainer>
         )
     }
