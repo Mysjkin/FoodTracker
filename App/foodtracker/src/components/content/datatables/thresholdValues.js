@@ -55,18 +55,18 @@ const thresholds = {
         "Sorbitol":{"val": 0},
         "Stivelse":{"val": 0},
         "Sukkeralkoholer, total":{"val": 0},
-        "Sukkerarter, total":{"val": 1.35},
+        "Sukkerarter, total":{"val": 1.35, "i": 0},
         "Uronic Acid":{"val": 0}
     },
     "fattyAcids": {
-        "Andre fedtsyrer":{"val": 0.01},
-        "Fedtsyrer, total":{"val": 3.912},
-        "Sum monoumættede":{"val": 1.375},
-        "Sum mættede":{"val": 1.311},
+        "Andre fedtsyrer":{"val": 0.01, "i": 0},
+        "Fedtsyrer, total":{"val": 3.912, "i": 0},
+        "Sum monoumættede":{"val": 1.375, "i": 0},
+        "Sum mættede":{"val": 1.311, "i": 0},
         "Sum n-3 fedtsyrer":{"val": 0.112},
         "Sum n-6 fedtsyrer":{"val": 0.469},
-        "Sum polyumættede":{"val": 0.693},
-        "Transfedtsyrer, total":{"val": 0.024}
+        "Sum polyumættede":{"val": 0.693, "i": 0},
+        "Transfedtsyrer, total":{"val": 0.024, "i": 0}
     },
     "minerals": { 
         "Silicium, Si": {"val": 0.5},
@@ -144,6 +144,23 @@ const thresholds = {
         "Pantothensyre":{"val": 0.337},
         "Retinol":{"val": 0},
         "thiamin":{"val": 0.044}
+    },
+    "macros": {
+        "Vand":{"val": 54.83, "i": 0},
+        "Energi, kJ":{"val": 958.86, "i": -1},
+        "Kulhydrat, tilgængelig, deklaration":{"val": 17.39, "i": 0},
+        "Energi, kcal":{"val": 229.57, "i": -1},
+        "Aske":{"val": 2.12, "i": 0},
+        "Tilsat sukker":{"val": 4.14, "i": -1},
+        "Protein, deklaration":{"val": 9.49},
+        "Fedt, total":{"val": 12.1, "i": -1},
+        "Nitrogen, total":{"val": 1.54, "i": 0},
+        "Tørstof":{"val": 45.171, "i": 0},
+        "Kulhydrat, difference":{"val": 21, "i": 0},
+        "Protein, videnskabelig":{"val": 9.36},
+        "Alkohol":{"val": 0.0069, "i": 0},
+        "Kostfibre":{"val": 2.29},
+        "Kulhydrat, tilgængelig, videnskabelig":{"val": 18.73, "i": 0}
     }
 };
 

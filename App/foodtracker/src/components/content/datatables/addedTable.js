@@ -77,7 +77,7 @@ class AddedTable extends Component {
                 var category = trackingInfo[key][label];
                 var tb = <TrackingBar key={label+key}
                                       label={label} 
-                                      value={Math.round(category.value * 10) / 10} 
+                                      value={Math.round(category.value * 10) / 10}
                                       progress={Math.round((category.value / category.goal * 100) * 10) / 10}
                                       indicator ={category.i}/>
                 

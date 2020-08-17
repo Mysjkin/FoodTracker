@@ -23,7 +23,7 @@ const linkStyle = {
     "display":"inline-block",
     "padding":"0.5em 2em",
     "margin":"0.3em 0.3em 0.3em 0.5em",
-    "border-radius":"2em",
+    "borderRadius":"2em",
     "boxSizing": "border-box",
     "fontSize": "12px",
     "fontFamily":"'Roboto',sans-serif",
@@ -42,7 +42,8 @@ const inputStyle = {
     "backgroundColor": "#fff",
     "border":"1px solid grey",
     "padding":"0px",
-    "height": "22px"
+    "height": "22px",
+    "width": "100px"
 }
 
 const addBntDisabled = {
@@ -139,7 +140,7 @@ class SelectionTable extends Component {
             if (food[key] === null) return;
 
             var tablebody = [];
-            /*  */
+            
             food[key].forEach(category => {
                 var unit = category['unit'];
                 if (unit === undefined) {
@@ -150,18 +151,25 @@ class SelectionTable extends Component {
                 }
                 var rowStyle = {};
 
-                if (thresholds[key] === undefined) return
-
-                /* Set different style based on how they compare to the median of other foods
-                   where the category is not zero. And set different color based on indicator
-                   i. */
-                var categoryValue =  parseFloat(thresholds[key][category['name']].val);
-                var betterThanMedian = categoryValue <= parseFloat(category['value']) && categoryValue > 0;
-                if (betterThanMedian && thresholds[key][category['name']].i === undefined){
-                    rowStyle = {"background": "#3D9970"};
-                }
-                else if (betterThanMedian && thresholds[key][category['name']].i === -1){
-                    rowStyle = {"background": "#FF4136"};
+                // Note, not all categories have threshold values defined.
+                if (thresholds[key] !== undefined) {
+                    /* Set different style based on how they compare to the median of other foods
+                    where the category is not zero. And set different color based on indicator
+                    i. */
+                    var thresholdCategoryName = thresholds[key][category.name];
+                    if (thresholdCategoryName === undefined || thresholds[key][category['name']].i === 0){
+                        rowStyle = {};
+                    }
+                    else{
+                        var thresholdCategoryValue =  parseFloat(thresholdCategoryName.val);
+                        var betterThanMedian = thresholdCategoryValue <= parseFloat(category['value']) && thresholdCategoryValue > 0;
+                        if (betterThanMedian && thresholds[key][category['name']].i === undefined){
+                            rowStyle = {"background": "#3D9970"};
+                        }
+                        else if (betterThanMedian && thresholds[key][category['name']].i === -1){
+                            rowStyle = {"background": "#FF4136"};
+                        }
+                    }
                 }
 
                 tablebody.push(<tr key={category['id']} style={rowStyle}><td>{category['name']}</td><td>{category['value']}</td><td>{unit}</td></tr>)

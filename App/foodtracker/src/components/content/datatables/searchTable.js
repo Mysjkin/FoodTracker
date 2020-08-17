@@ -30,11 +30,11 @@ const pageBntStyle = {
     "padding":"0.6em 2em",
     "margin":"0.5em 0.3em 0.3em 0.2em",
     "borderRadius":"2em",
-    "box-sizing": "border-box",
-    "font-size": "12px",
-    "font-family":"'Roboto',sans-serif",
-    "font-weight":"300",
-    "text-align":"center",
+    "boxSizing": "border-box",
+    "fontSize": "12px",
+    "fontFamily":"'Roboto',sans-serif",
+    "fontWeight":"300",
+    "textAlign":"center",
     "transition": "all 0.2s",
     "float": "center",
     "color": "#FFFFFF",
@@ -60,12 +60,17 @@ class SearchTable extends Component {
         var endPoint = process.env.REACT_APP_API_URL + "search?name=" + query + "&pageNumber=" + pageNumber;
         trackPromise(
             Axios.get(endPoint).then(response => {
-                this.setState({
-                    data: response.data,
-                    name: query,
-                    pageNumber: pageNumber,
-                    prevSearchName: this.props.history.location.search
-                });
+                if (response.data != null && response.data.length > 0) {
+                    this.setState({
+                        data: response.data,
+                        name: query,
+                        pageNumber: pageNumber,
+                        prevSearchName: this.props.history.location.search
+                    });
+                }
+                else {
+                    this.props.history.push(this.state.prevSearchName);
+                }
             })
         );
     }
@@ -127,10 +132,16 @@ class SearchTable extends Component {
         this.state.data.forEach(el => {
             els.push(
             <RowBox key={el['id']}>
-                <Link to={"foods/"+el['id']} style={linkStyle} value={el}>{el['nameDk']}</Link> 
+                <Link to={"foods/"+el['id']} 
+                      style={linkStyle} 
+                      value={el}>{el['nameDk']}
+                </Link> 
                 <div>Pr. 100g</div> 
                 <div>
-                    Kcal: {el['kcal']} <ElSpan>-</ElSpan> Protein: {el['protein']} <ElSpan>-</ElSpan> Kulhydrater: {el['carbs']} <ElSpan>-</ElSpan> Fedt: {el['fat']}
+                    Kcal: {el['kcal']} 
+                    <ElSpan>-</ElSpan> Protein: {el['protein']} 
+                    <ElSpan>-</ElSpan> Kulhydrater: {el['carbs']} 
+                    <ElSpan>-</ElSpan> Fedt: {el['fat']}
                 </div>
             </RowBox>);
         });
