@@ -12,6 +12,10 @@ const NavList = styled.div`
 const NavItem = styled.div`
     justify-content: center;
     align-items: center;
+    transition: filter 300ms;
+    :hover {
+        filter: brightness(1.2);
+    }
 `;
 
 const NavDropdown = styled.div`

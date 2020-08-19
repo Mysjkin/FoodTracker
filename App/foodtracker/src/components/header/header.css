@@ -10,3 +10,14 @@
       grid-template-areas: "area1 area2 area3";
     }
 }
+
+.dropdownIcon {
+  width: 20px;
+  height: 20px;
+  transition: filter 300ms;
+  fill: #484a4d;
+}
+
+.dropdownIcon:hover {
+  filter: brightness(1.5);
+}

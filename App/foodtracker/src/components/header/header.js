@@ -1,9 +1,10 @@
-import React, {Component, Fragment} from "react";
+import React, {Fragment} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {NavbarList, NavbarItem, NavbarDropdown} from "./navbar";
 import {useMediaPredicate} from "react-media-hook";
 import './header.css';
+import {ReactComponent as  DropDownIcon} from '../../icons/dropdown.svg'
 
 const HeaderContainer = styled.div`
     grid-area: header;
@@ -27,7 +28,6 @@ const brandLinkStyle = {
 };
 
 const navLinkStyle = {
-    "display": "block",
     "height": "25px",
     "width": "60px",
     "borderRadius": "28px",
@@ -37,8 +37,8 @@ const navLinkStyle = {
     "fontFamily": "'Roboto',sans-serif",
     "fontWeight": "300",
     "display": "flex",
-    "justify-content": "center",
-    "align-items": "center",
+    "justifyContent": "center",
+    "alignItems": "center",
     "marginRight": "20px"
 };
 
@@ -103,7 +103,7 @@ function Header(props) {
                 <NavbarDropdown style={{"gridArea": "area3", 
                                         "paddingRight": "1cm", 
                                         "justifyContent": "flex-end"}}
-                                icon="."
+                                icon={<DropDownIcon className="dropdownIcon" />}
                                 handleDrowDownClick={handleDrowDownClick}>
                     {getNavBarItems(showProfileNavItem)}
                 </NavbarDropdown>
