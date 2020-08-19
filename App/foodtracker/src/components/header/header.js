@@ -1,9 +1,10 @@
-import React, {Component, Fragment} from "react";
+import React, {Fragment} from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {NavbarList, NavbarItem, NavbarDropdown} from "./navbar";
+import {NavbarList, NavbarItem, NavbarDropdown, DropdownMenuItem} from "./navbar";
 import {useMediaPredicate} from "react-media-hook";
 import './header.css';
+import {ReactComponent as  DropDownIcon} from '../../icons/dropdown.svg'
 
 const HeaderContainer = styled.div`
     grid-area: header;
@@ -27,7 +28,6 @@ const brandLinkStyle = {
 };
 
 const navLinkStyle = {
-    "display": "block",
     "height": "25px",
     "width": "60px",
     "borderRadius": "28px",
@@ -37,8 +37,8 @@ const navLinkStyle = {
     "fontFamily": "'Roboto',sans-serif",
     "fontWeight": "300",
     "display": "flex",
-    "justify-content": "center",
-    "align-items": "center",
+    "justifyContent": "center",
+    "alignItems": "center",
     "marginRight": "20px"
 };
 
@@ -69,20 +69,18 @@ function BrandItem(props) {
     )
 }
 
-function getNavBarItems(showProfile) {
+function getNavBarItems(showProfile, Component, style) {
+
+    let profileItem = <> </>;
+
+    if (showProfile) {
+        profileItem =  <Component contentText="Profile" icon="" linkTo="/" linkstyle={style}/>;
+    }
+
     return (
-        <Fragment>
-            {showProfile && 
-                <NavbarItem contentText="Profile" icon="" linkTo="/" linkstyle={navLinkStyle}/>
-            }
-            <NavbarItem contentText="Sign In" icon="" linkTo="/" linkstyle={navLinkStyle} />
-            <NavbarItem contentText="Sign Up" icon="" linkTo="/" linkstyle={navLinkStyle} />
-        </Fragment>
-    )
-}
-
-const handleDrowDownClick = (e) => {
-
+        [profileItem,
+        <Component contentText="Sign In" icon="" linkTo="/" linkstyle={style} />,
+        <Component contentText="Sign Up" icon="" linkTo="/" linkstyle={style} />])
 }
 
 function Header(props) {
@@ -96,16 +94,15 @@ function Header(props) {
                 <NavbarList style={{"gridArea": "area3", 
                                     "paddingRight": "1cm", 
                                     "justifyContent": "flex-end"}}>
-                    {getNavBarItems(showProfileNavItem)}
+                    {getNavBarItems(showProfileNavItem, NavbarItem, navLinkStyle)}
                 </NavbarList>
             }
             {!isLargeScreen &&
                 <NavbarDropdown style={{"gridArea": "area3", 
                                         "paddingRight": "1cm", 
                                         "justifyContent": "flex-end"}}
-                                icon="."
-                                handleDrowDownClick={handleDrowDownClick}>
-                    {getNavBarItems(showProfileNavItem)}
+                                icon={<DropDownIcon className="dropdownIcon" />}>
+                    {getNavBarItems(showProfileNavItem, DropdownMenuItem)}
                 </NavbarDropdown>
             }
         </HeaderContainer>
