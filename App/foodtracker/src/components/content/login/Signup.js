@@ -1,43 +1,40 @@
-import React, { useState } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import "./Login.css";
+import React from "react";
+import KeyIcon from "./resources/key_icon.svg";
+import './style.scss';
 
-export default function Signup() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export class SignUp extends React.Component {
 
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
+  constructor(props) {
+    super(props);
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  render() {
+    return (
+      <div className="base-container">
+        <div className="content">
+          <div className="image">
+            <img src={KeyIcon} />
+          </div>
+          <div className="form">
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input type="text" name="username" placeholder="Username"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input type="text" name="email" placeholder="Email"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input type="password" name="password" placeholder="Password"/>
+            </div>
+          </div>
+        </div>
+        <div className="footer">
+          <button type="button" className="btn">Sign Up</button>
+        </div>
+      </div>
+    );
   }
 
-  return (
-    <div className="Login">
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <ControlLabel>Email</ControlLabel>
-          <FormControl
-            autoFocus
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
-          <FormControl
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            type="password"
-          />
-        </FormGroup>
-        <Button block bsSize="large" disabled={!validateForm()} type="submit">
-          Login
-        </Button>
-      </form>
-    </div>
-  );
 }
