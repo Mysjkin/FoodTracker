@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {NavbarList, NavbarItem, NavbarDropdown, DropdownMenuItem} from "./navbar";
@@ -79,8 +79,8 @@ function getNavBarItems(showProfile, Component, style) {
 
     return (
         [profileItem,
-        <Component contentText="Sign In" icon="" linkTo="/" linkstyle={style} />,
-        <Component contentText="Sign Up" icon="" linkTo="/" linkstyle={style} />])
+        <Component contentText="Sign In" icon="" linkTo="/signin" linkstyle={style} />,
+        <Component contentText="Sign Up" icon="" linkTo="/signup" linkstyle={style} />])
 }
 
 function Header(props) {
@@ -93,14 +93,16 @@ function Header(props) {
             {isLargeScreen && 
                 <NavbarList style={{"gridArea": "area3", 
                                     "paddingRight": "1cm", 
-                                    "justifyContent": "flex-end"}}>
+                                    "justifyContent": "flex-end",
+                                    "width": "100%", "height": "100%"}}>
                     {getNavBarItems(showProfileNavItem, NavbarItem, navLinkStyle)}
                 </NavbarList>
             }
             {!isLargeScreen &&
                 <NavbarDropdown style={{"gridArea": "area3", 
                                         "paddingRight": "1cm", 
-                                        "justifyContent": "flex-end"}}
+                                        "justifyContent": "flex-end",
+                                        "width": "100%", "height": "100%"}}
                                 icon={<DropDownIcon className="dropdownIcon" />}>
                     {getNavBarItems(showProfileNavItem, DropdownMenuItem)}
                 </NavbarDropdown>

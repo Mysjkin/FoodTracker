@@ -3,10 +3,11 @@ import styled from "styled-components";
 import SearchBar from "./searchbar/searchbar"
 import BasicMain from "./main/basicMain"
 import SearchTable from "./datatables/searchTable"
-import { Route, Switch} from "react-router";
+import {Route, Switch} from "react-router";
 import SelectionTable from "./datatables/selectionTable";
 import AddedTable from "./datatables/addedTable";
-import LoadingIndicator from '../extra/LoadingIndicator'
+import LoadingIndicator from '../extra/LoadingIndicator';
+import {Login, SignUp} from './login';
 
 const CntWrapper = styled.div`
     grid-area: content;
@@ -98,6 +99,12 @@ class Content extends Component {
                     <Route exact path="/">
                         {searchBarTop}
                         {this.state.content}
+                    </Route>
+                    <Route exact path="/signin">
+                        <Login />
+                    </Route>
+                    <Route exact path="/signup">
+                        <SignUp />
                     </Route>
                 </Switch>
             </CntWrapper>

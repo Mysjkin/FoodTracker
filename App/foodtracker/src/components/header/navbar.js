@@ -109,7 +109,9 @@ function NavbarDropdown(props) {
             </div>
             {open && 
                 <DropDownMenu>
-                    {props.children}
+                    {React.Children.map(props.children, (child, i) => {
+                        return <div onClick={() => setOpen(false)}>{React.cloneElement(child)}</div>
+                    })}
                 </DropDownMenu>
             }
         </NavDropdown>
