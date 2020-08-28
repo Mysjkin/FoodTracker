@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {AuthProvider} from './components/content/login/authentication/authProvider';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<AuthProvider> <App /> </AuthProvider>, document.getElementById('root'));
 
 if (module.hot){
     module.hot.accept();

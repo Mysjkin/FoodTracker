@@ -74,13 +74,13 @@ function getNavBarItems(showProfile, Component, style) {
     let profileItem = <> </>;
 
     if (showProfile) {
-        profileItem =  <Component contentText="Profile" icon="" linkTo="/" linkstyle={style}/>;
+        profileItem =  <Component key="profile" contentText="Profile" icon="" linkTo="/" linkstyle={style}/>;
     }
 
     return (
         [profileItem,
-        <Component contentText="Sign In" icon="" linkTo="/signin" linkstyle={style} />,
-        <Component contentText="Sign Up" icon="" linkTo="/signup" linkstyle={style} />])
+        <Component key="signin" contentText="Sign In" icon="" linkTo="/signin" linkstyle={style} />,
+        <Component key="signup" contentText="Sign Up" icon="" linkTo="/signup" linkstyle={style} />])
 }
 
 function Header(props) {

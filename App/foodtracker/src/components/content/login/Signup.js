@@ -1,40 +1,75 @@
-import React from "react";
+import React, {useState} from "react";
 import KeyIcon from "./resources/key_icon.svg";
 import './style.scss';
+import {useContext} from "react";
+import {useHistory} from "react-router-dom";
+import {AuthContext} from "./authentication/authProvider";
+import {FirebaseSignup} from "./authentication/firebaseAuth";
 
-export class SignUp extends React.Component {
+export function SignUp(props) {
 
-  constructor(props) {
-    super(props);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const authContext = useContext(AuthContext);
+  const history = useHistory();
+
+  const onSubmit = (e, email, password) => {
+    try {
+        let credential = FirebaseSignup("", email, password);
+        authContext.setUser(credential);
+        history.push("/");
+    }
+    catch(error) {
+        console.log(error.message)
+        alert(error.message);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+    };
   }
 
-  render() {
-    return (
-      <div className="base-container">
-        <div className="content">
-          <div className="image">
-            <img src={KeyIcon} />
-          </div>
-          <div className="form">
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input type="text" name="username" placeholder="Username"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="text" name="email" placeholder="Email"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input type="password" name="password" placeholder="Password"/>
-            </div>
-          </div>
+  return (
+    <div className="base-container">
+      <div className="content">
+        <div className="image">
+          <img src={KeyIcon} />
         </div>
-        <div className="footer">
-          <button type="button" className="btn">Sign Up</button>
+        <div className="form">
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input type="text" 
+                   name="username" 
+                   placeholder="Username"
+                   value={username}
+                   onChange={(e) => setUsername(e.target.value)}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input type="text" 
+                   name="email" 
+                   placeholder="Email"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" 
+                   name="password" 
+                   placeholder="Password"
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}/>
+          </div>
         </div>
       </div>
-    );
-  }
-
+      <div className="footer">
+        <button type="button" 
+                className="btn" 
+                onClick={(e) => onSubmit(e, email, password)}>
+          Sign Up
+        </button>
+      </div>
+    </div>
+  );
 }

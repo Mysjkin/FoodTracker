@@ -17,6 +17,7 @@ const CntWrapper = styled.div`
 class Content extends Component {
     constructor(props){
         super(props);
+
         this.state = {
             query: '',
             addedFoods: [],
@@ -100,11 +101,11 @@ class Content extends Component {
                         {searchBarTop}
                         {this.state.content}
                     </Route>
-                    <Route exact path="/signin">
-                        <Login />
+                    <Route path="/signin">
+                        <Login/>
                     </Route>
-                    <Route exact path="/signup">
-                        <SignUp />
+                    <Route path="/signup">
+                        <SignUp/>
                     </Route>
                 </Switch>
             </CntWrapper>

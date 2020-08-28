@@ -17,7 +17,7 @@ const RowBox = styled.div`
     padding-bottom: 8px;
     font-size: 12px;
     border-bottom: 1px solid #eeeeee;
-    `;
+`;
 
 const linkStyle = {
     "color": "#20232a",
@@ -38,7 +38,7 @@ const pageBntStyle = {
     "transition": "all 0.2s",
     "float": "center",
     "color": "#FFFFFF",
-    "background-color": "#20232a",
+    "backgroundColor": "#20232a",
     "border": "none"
 }
 

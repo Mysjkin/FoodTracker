@@ -1,36 +1,66 @@
-import React from "react";
+import React, {useState} from "react";
 import KeyIcon from "./resources/key_icon.svg";
 import './style.scss';
+import {useContext} from "react";
+import {useHistory} from "react-router-dom";
+import {AuthContext} from "./authentication/authProvider";
+import {FirebaseLogin} from "./authentication/firebaseAuth";
 
-export class Login extends React.Component {
+export function Login(props) {
 
-  constructor(props) {
-    super(props);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const authContext = useContext(AuthContext);
+  const history = useHistory();
+
+  const onSubmit = (e, email, password) => {
+    try {
+      let credential = FirebaseLogin(email, password);
+      authContext.setUser(credential);
+      console.log(authContext.user);
+      history.push("/");
+    }
+    catch(error) {
+        console.log(error.message)
+        alert(error.message);
+        setEmail("");
+        setPassword("");
+    };
   }
 
-  render() {
-    return (
-      <div className="base-container">
-        <div className="content">
-          <div className="image">
-            <img src={KeyIcon} />
-          </div>
-          <div className="form">
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input type="text" name="username" placeholder="Username"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input type="password" name="password" placeholder="Password"/>
-            </div>
-          </div>
+  return (
+    <div className="base-container">
+      <div className="content">
+        <div className="image">
+          <img src={KeyIcon} />
         </div>
-        <div className="footer">
-          <button type="button" className="btn">Sign In</button>
+        <div className="form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input type="text" 
+                   name="email" 
+                   placeholder="Email"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" 
+                   name="password" 
+                   placeholder="Password"
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}/>
+          </div>
         </div>
       </div>
-    );
-  }
-
+      <div className="footer">
+        <button type="button" 
+                className="btn"
+                onClick={(e) => onSubmit(e, email, password)}>
+            Sign In
+        </button>
+      </div>
+    </div>
+  );
 }
