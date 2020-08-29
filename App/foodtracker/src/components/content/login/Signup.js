@@ -4,7 +4,7 @@ import './style.scss';
 import {useContext} from "react";
 import {useHistory} from "react-router-dom";
 import {AuthContext} from "./authentication/authProvider";
-import {FirebaseSignup} from "./authentication/firebaseAuth";
+import {FirebaseSignup as Register} from "./authentication/firebaseAuth";
 
 export function SignUp(props) {
 
@@ -15,9 +15,9 @@ export function SignUp(props) {
   const authContext = useContext(AuthContext);
   const history = useHistory();
 
-  const onSubmit = (e, email, password) => {
+  const onSubmit = (e, username, email, password) => {
     try {
-        let credential = FirebaseSignup("", email, password);
+        let credential = await Register(username, email, password);
         authContext.setUser(credential);
         history.push("/");
     }
@@ -66,7 +66,7 @@ export function SignUp(props) {
       <div className="footer">
         <button type="button" 
                 className="btn" 
-                onClick={(e) => onSubmit(e, email, password)}>
+                onClick={(e) => onSubmit(e, username, email, password)}>
           Sign Up
         </button>
       </div>

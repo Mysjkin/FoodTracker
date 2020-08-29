@@ -2,9 +2,9 @@ import firebase from "./firebase";
 import "firebase/auth";
 import "firebase/firestore";
 
-const FirebaseLogin = (email, password) => {
-    let credential = {};
-    firebase
+const FirebaseLogin = async (email, password) => {
+    var credential = {};
+    await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(firebaseCredential => {
@@ -21,13 +21,16 @@ const FirebaseLogout = () => {
 
 }
 
-const FirebaseSignup = (username, email, password) => {
-    let credential = {};
-    firebase
+const FirebaseSignup = async (username, email, password) => {
+    var credential = {};
+    await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((firebaseCredential) => {
-            credential = firebaseCredential
+            firebase.auth().currentUser.updateProfile({
+                displayName: username
+            });
+            credential = firebaseCredential;
         })
         .catch(error => {
             console.log(error.message);

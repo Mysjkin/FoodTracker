@@ -4,7 +4,7 @@ import './style.scss';
 import {useContext} from "react";
 import {useHistory} from "react-router-dom";
 import {AuthContext} from "./authentication/authProvider";
-import {FirebaseLogin} from "./authentication/firebaseAuth";
+import {FirebaseLogin as Authenticate} from "./authentication/firebaseAuth";
 
 export function Login(props) {
 
@@ -16,9 +16,8 @@ export function Login(props) {
 
   const onSubmit = (e, email, password) => {
     try {
-      let credential = FirebaseLogin(email, password);
+      let credential = await Authenticate(email, password);
       authContext.setUser(credential);
-      console.log(authContext.user);
       history.push("/");
     }
     catch(error) {
